@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8" />
@@ -8,27 +8,35 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+            color: #333;
         }
 
         .header {
             margin-bottom: 20px;
-            padding: 10px 15px;
-            border: 1px solid #007BFF;
-            border-radius: 5px;
-            background-color: #E3F2FD;
-            color: #0D47A1;
+            padding: 15px 20px;
+            border-left: 5px solid #007BFF;
+            background-color: #f0f8ff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header h2 {
-            margin: 0 0 5px 0;
-            font-weight: bold;
+            margin: 0 0 8px 0;
+            font-weight: 600;
+            color: #0D47A1;
         }
 
         .header p {
-            margin: 2px 0;
+            margin: 3px 0;
             font-size: 14px;
+            color: #444;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
         }
 
         .buttons {
@@ -37,65 +45,85 @@
 
         .buttons button {
             margin-right: 10px;
-            padding: 10px 15px;
+            padding: 10px 18px;
             background-color: #007BFF;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+
+        .buttons button:hover {
+            background-color: #0056b3;
         }
 
         table {
-            width: 60%;
+            width: 100%;
             border-collapse: collapse;
-            min-width: 400px;
-            border: 1px solid #000;
+            background-color: white;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         th,
         td {
-            border: 1px solid #000;
-            padding: 4px;
+            border: 1px solid #ddd;
+            padding: 8px 10px;
             text-align: left;
         }
 
-        /* Estilo para a tabela do total */
+        th {
+            background-color: #f1f1f1;
+        }
+
+        th#tittle-colunm:nth-child(3) {
+            background-color: #ffeb3b;
+        }
+
         #table-total {
-            margin-top: 20px;
+            max-width: 400px;
+            background-color: #fff;
+        }
+
+        #total-value {
+            font-weight: bold;
+            color: #0D47A1;
+            font-size: 18px;
         }
     </style>
 </head>
 
 <body>
 
+    <div class="header">
+        <h2>Paulino Empreiteira</h2>
+        <p>Email: paulino.empreiteira@gmail.com</p>
+        <p>Contato: (11) 99999-9999</p>
+    </div>
+
     <div class="buttons">
-        <button id="btn-add-colunm">Adicionar coluna</button>
+        <button id="btn-add-colunm">Adicionar Coluna</button>
         <button id="btn-add-row">Adicionar Linha</button>
         <button id="export-pdf">Exportar para PDF</button>
     </div>
 
-    <h1>Criar orçamento</h1>
+    <h1>Criar Orçamento</h1>
 
     <table id="table">
-        <div class="header">
-            <h2>Paulino Empreiteira</h2>
-            <p>Email: paulino.empreiteira@gmail.com</p>
-            <p>Contato: (11) 99999-9999</p>
-        </div>
         <thead>
             <tr>
                 <th id="tittle-colunm">Material</th>
                 <th id="tittle-colunm">Quantidade</th>
-                <th style="background-color: yellow;" id="tittle-colunm">SubTotal</th>
+                <th id="tittle-colunm">SubTotal</th>
             </tr>
         </thead>
-        <tbody>
-        </tbody>
+        <tbody></tbody>
     </table>
 
-    <!-- Tabela de total -->
     <h2>Total do Orçamento</h2>
-    <table id="table-total" style="width: 60%; border-collapse: collapse; min-width: 400px; border: 1px solid #000;">
+    <table id="table-total">
         <thead>
             <tr>
                 <th>Total</th>
@@ -124,18 +152,14 @@
             const ths = tr.querySelectorAll('th');
             ths.forEach((th, index) => {
                 if (th.textContent.toLowerCase() === 'subtotal') {
-
                     const newth = document.createElement('th')
                     const texTH = prompt('Digite o nome da nova coluna:');
-
                     if (texTH === '') {
                         alert('Digite um nome para a nova coluna');
                         return;
                     }
-
-                    newth.textContent = texTH
-                    th.parentNode.insertBefore(newth, th)
-
+                    newth.textContent = texTH;
+                    th.parentNode.insertBefore(newth, th);
                     const rows = tableBody.querySelectorAll('tr');
                     if (rows.length === 0) {
                         alert('Não há linhas na tabela para adicionar a nova coluna.');
@@ -143,42 +167,34 @@
                     }
                     rows.forEach(row => {
                         const newTd = document.createElement('td');
-                        const text = prompt(`digite o valor da nova coluna ${texTH}`);
+                        const text = prompt(`Digite o valor da nova coluna ${texTH}`);
                         newTd.textContent = text;
-                        row.insertBefore(newTd, row.children[index]); // insere no mesmo índice do <th>
+                        row.insertBefore(newTd, row.children[index]);
                     });
-
                 }
-            }
-            )
-        })
+            });
+        });
 
         addRowButton.addEventListener('click', () => {
             const newRow = document.createElement('tr');
             const ths = tr.querySelectorAll('th');
-
             ths.forEach(th => {
                 const newTd = document.createElement('td');
                 let text = prompt(`Digite o valor para ${th.textContent}`);
-
                 if (th.textContent.toLowerCase() === 'subtotal') {
-                    // tenta converter para número
-                    let valorNum = parseFloat(text.replace(',', '.')); // aceita vírgula como decimal
+                    let valorNum = parseFloat(text.replace(',', '.'));
                     if (isNaN(valorNum)) {
                         newTd.textContent = '-';
                     } else {
-                        // formata para moeda BRL
                         newTd.textContent = valorNum.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                     }
                 } else {
                     newTd.textContent = text;
                 }
-
                 newRow.appendChild(newTd);
             });
-
             tableBody.appendChild(newRow);
-            atualizarTotal(); // atualiza o total ao adicionar linha
+            atualizarTotal();
         });
 
         function atualizarTotal() {
@@ -192,7 +208,6 @@
                 }
             });
             if (subtotalIndex === -1) return;
-
             rows.forEach(row => {
                 const tds = row.querySelectorAll('td');
                 if (tds.length > subtotalIndex) {
@@ -204,7 +219,6 @@
                     }
                 }
             });
-
             const totalValueTd = document.querySelector('#total-value');
             totalValueTd.textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
@@ -213,29 +227,28 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
-            // Adiciona o cabeçalho com os dados da empresa no topo do PDF
-            doc.setFontSize(16);
+            // Cabeçalho personalizado
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
             doc.setTextColor(13, 71, 161);
-            doc.text("Paulino Empreiteira", 14, 15);
+            doc.text("Paulino Empreiteira", 14, 18);
 
+            doc.setFont('helvetica', 'normal');
             doc.setFontSize(11);
-            doc.setTextColor(0, 0, 0);
-            doc.text("Email: paulino.empreiteira@gmail.com", 14, 22);
-            doc.text("Contato: (11) 99999-9999", 14, 28);
+            doc.setTextColor(50, 50, 50);
+            doc.text("Email: paulino.empreiteira@gmail.com", 14, 26);
+            doc.text("Contato: (11) 99999-9999", 14, 32);
 
-            // Espaço antes da tabela
+            // Tabela de orçamento
             doc.autoTable({
                 html: '#table',
-                startY: 35,
+                startY: 40,
                 theme: 'grid',
-                styles: {
-                    fontSize: 10,
-                    lineWidth: 0.2,
-                    lineColor: [0, 0, 0],
-                    textColor: [0, 0, 0],
-                },
+                styles: { fontSize: 10 },
                 headStyles: {
-                    fillColor: [255, 255, 255],
+                    fillColor: [220, 220, 220],
+                    textColor: 0,
+                    fontStyle: 'bold'
                 },
                 didParseCell: function (data) {
                     if (
@@ -243,30 +256,28 @@
                         data.cell.raw &&
                         data.cell.raw.textContent.toLowerCase() === 'subtotal'
                     ) {
-                        data.cell.styles.fillColor = [255, 255, 0]; // Amarelo
-                        data.cell.styles.textColor = [0, 0, 0]; // Texto preto
+                        data.cell.styles.fillColor = [255, 255, 0];
+                        data.cell.styles.textColor = [0, 0, 0];
                     }
                 }
             });
 
-            // Adiciona o total logo após a tabela
-            const finalY = doc.lastAutoTable.finalY || 35;
+            const finalY = doc.lastAutoTable.finalY + 10;
 
-            doc.setFontSize(12);
-            doc.setTextColor(0, 0, 0);
-            doc.text('Total do Orçamento:', 14, finalY + 10);
-
-            // Pega o valor total exibido na página
+            // Total do orçamento destacado
             const totalValue = document.querySelector('#total-value').textContent;
+            doc.setFontSize(12);
+            doc.setTextColor(0);
+            doc.text('Total do Orçamento:', 14, finalY);
+
+         
             doc.setFontSize(14);
             doc.setTextColor(13, 71, 161);
-            doc.text(totalValue, 60, finalY + 10);
+            doc.text(totalValue, 60, finalY + 1);
 
             doc.save('orcamento.pdf');
         });
-
     </script>
-
 </body>
 
 </html>
